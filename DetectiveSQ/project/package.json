@@ -1,0 +1,26 @@
+{
+  "name": "detective-sq-v2",
+  "version": "1.0.0",
+  "description": "AI-powered Chrome extension analyzer for security and privacy risks",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "vitest",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "crx": "^5.0.1",
+    "cheerio": "^1.0.0-rc.12",
+    "esprima": "^4.0.1",
+    "escodegen": "^2.1.0",
+    "openai": "^4.17.4",
+    "express": "^4.18.2",
+    "winston": "^3.11.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.6",
+    "eslint": "^8.53.0"
+  }
+}

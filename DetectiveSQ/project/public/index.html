@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DetectiveSQ - Chrome Extension Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">DetectiveSQ v2</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Analyze Extension</h2>
+            <input type="text" id="extensionPath" placeholder="Enter extension path" 
+                   class="w-full p-2 border rounded mb-4">
+            <button onclick="analyzeExtension()" 
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Analyze
+            </button>
+        </div>
+
+        <div id="results" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Analysis Results</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">Manifest Analysis</h3>
+                        <pre id="manifestResults" class="text-sm overflow-auto"></pre>
+                    </div>
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">JavaScript Analysis</h3>
+                        <pre id="jsResults" class="text-sm overflow-auto"></pre>
+                    </div>
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">HTML Analysis</h3>
+                        <pre id="htmlResults" class="text-sm overflow-auto"></pre>
+                    </div>
+                    <div class="border rounded p-4">
+                        <h3 class="font-semibold mb-2">AI Analysis</h3>
+                        <pre id="aiResults" class="text-sm overflow-auto"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function analyzeExtension() {
+            const extensionPath = document.getElementById('extensionPath').value;
+            if (!extensionPath) {
+                alert('Please enter an extension path');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ extensionPath })
+                });
+
+                const result = await response.json();
+                displayResults(result);
+            } catch (error) {
+                alert('Analysis failed: ' + error.message);
+            }
+        }
+
+        function displayResults(results) {
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('manifestResults').textContent = JSON.stringify(results.manifest, null, 2);
+            document.getElementById('jsResults').textContent = JSON.stringify(results.javascript, null, 2);
+            document.getElementById('htmlResults').textContent = JSON.stringify(results.html, null, 2);
+            document.getElementById('aiResults').textContent = JSON.stringify(results.aiAnalysis, null, 2);
+        }
+    </script>
+</body>
+</html>
